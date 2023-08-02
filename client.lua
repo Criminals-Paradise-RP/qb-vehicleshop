@@ -382,23 +382,43 @@ function Init()
         end
     end)
     CreateThread(function()
-        local financeZone = BoxZone:Create(Config.FinanceZone, 2.0, 2.0, {
-            name = "vehicleshop_financeZone",
-            offset = {0.0, 0.0, 0.0},
-            scale = {1.0, 1.0, 1.0},
-            minZ = Config.FinanceZone.z - 1,
-            maxZ = Config.FinanceZone.z + 1,
-            debugPoly = false,
-        })
-
-        financeZone:onPlayerInOut(function(isPointInside)
-            if isPointInside then
-                exports['qb-menu']:showHeader(financeMenu)
-            else
-                exports['qb-menu']:closeMenu()
-            end
-        end)
+        for _, financeZonePos in ipairs(Config.FinanceZones) do
+            local financeZone = BoxZone:Create(financeZonePos, 2.0, 2.0, {
+                name = "vehicleshop_financeZone",
+                offset = {0.0, 0.0, 0.0},
+                scale = {1.0, 1.0, 1.0},
+                minZ = financeZonePos.z - 1,
+                maxZ = financeZonePos.z + 1,
+                debugPoly = false,
+            })
+    
+            financeZone:onPlayerInOut(function(isPointInside)
+                if isPointInside then
+                    exports['qb-menu']:showHeader(financeMenu)
+                else
+                    exports['qb-menu']:closeMenu()
+                end
+            end)
+        end
     end)
+    -- CreateThread(function()
+    --     local financeZone = BoxZone:Create(Config.FinanceZone, 2.0, 2.0, {
+    --         name = "vehicleshop_financeZone",
+    --         offset = {0.0, 0.0, 0.0},
+    --         scale = {1.0, 1.0, 1.0},
+    --         minZ = Config.FinanceZone.z - 1,
+    --         maxZ = Config.FinanceZone.z + 1,
+    --         debugPoly = false,
+    --     })
+
+    --     financeZone:onPlayerInOut(function(isPointInside)
+    --         if isPointInside then
+    --             exports['qb-menu']:showHeader(financeMenu)
+    --         else
+    --             exports['qb-menu']:closeMenu()
+    --         end
+    --     end)
+    -- end)
     CreateThread(function()
         for k in pairs(Config.Shops) do
             for i = 1, #Config.Shops[k]['ShowroomVehicles'] do
@@ -439,7 +459,7 @@ RegisterNetEvent('qb-vehicleshop:client:TestDrive', function()
         tempShop = insideShop -- temp hacky way of setting the shop because it changes after the callback has returned since you are outside the zone
         QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
             local veh = NetToVeh(netId)
-            exports['LegacyFuel']:SetFuel(veh, 100)
+            exports['cdn-fuel']:SetFuel(veh, 100)
             SetVehicleNumberPlateText(veh, 'TESTDRIVE')
             SetEntityHeading(veh, Config.Shops[tempShop]["TestDriveSpawn"].w)
             TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(veh))
@@ -461,7 +481,7 @@ RegisterNetEvent('qb-vehicleshop:client:customTestDrive', function(data)
         tempShop = insideShop -- temp hacky way of setting the shop because it changes after the callback has returned since you are outside the zone
         QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
             local veh = NetToVeh(netId)
-            exports['LegacyFuel']:SetFuel(veh, 100)
+            exports['cdn-fuel']:SetFuel(veh, 100)
             SetVehicleNumberPlateText(veh, 'TESTDRIVE')
             SetEntityHeading(veh, Config.Shops[tempShop]["TestDriveSpawn"].w)
             TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(veh))
@@ -727,7 +747,7 @@ RegisterNetEvent('qb-vehicleshop:client:buyShowroomVehicle', function(vehicle, p
     tempShop = insideShop -- temp hacky way of setting the shop because it changes after the callback has returned since you are outside the zone
     QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
         local veh = NetToVeh(netId)
-        exports['LegacyFuel']:SetFuel(veh, 100)
+        exports['cdn-fuel']:SetFuel(veh, 100)
         SetVehicleNumberPlateText(veh, plate)
         SetEntityHeading(veh, Config.Shops[tempShop]["VehicleSpawn"].w)
         TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
