@@ -16,7 +16,7 @@ Config.FilterByMake = true -- adds a make list before selecting category in shop
 Config.SortAlphabetically = true -- will sort make, category, and vehicle selection menus alphabetically
 Config.HideCategorySelectForOne = true -- will hide the category selection menu if a shop only sells one category of vehicle or a make has only one category
 Config.Shops = {
-    ['gabzpdm'] = {
+    ['pdm'] = {
         ['Type'] = 'free-use', -- no player interaction is required to purchase a car
         ['Zone'] = {
             ['Shape'] = {--polygon that surrounds the shop
@@ -69,21 +69,6 @@ Config.Shops = {
                 defaultVehicle = 'rhapsody',
                 chosenVehicle = 'rhapsody'
             },
-            -- [6] = {
-            --     coords = vector4(-43.31, -1099.02, 25.44, 52.5),
-            --     defaultVehicle = 'bati',
-            --     chosenVehicle = 'bati'
-            -- },
-            -- [7] = {
-            --     coords = vector4(-50.66, -1093.05, 25.44, 222.5),
-            --     defaultVehicle = 'bati',
-            --     chosenVehicle = 'bati'
-            -- },
-            -- [8] = {
-            --     coords = vector4(-44.28, -1102.47, 25.44, 298.5),
-            --     defaultVehicle = 'bati',
-            --     chosenVehicle = 'bati'
-            -- }
         },
     },
     ['lsmotors'] = {
@@ -341,7 +326,7 @@ Config.Shops = {
             },
         },
     },
-    ['bigdealer'] = {
+    ['sandy'] = {
         ['Type'] = 'managed', -- no player interaction is required to purchase a car
         ['Zone'] = {
             ['Shape'] = {--polygon that surrounds the shop
