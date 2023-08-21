@@ -64,15 +64,15 @@ local financeMenu = {
     }
 }
 
-local returnTestDrive = {
-    {
-        header = Lang:t('menus.returnTestDrive_header'),
-        icon = "fa-solid fa-flag-checkered",
-        params = {
-            event = 'qb-vehicleshop:client:TestDriveReturn'
-        }
-    }
-}
+-- local returnTestDrive = {
+--     {
+--         header = Lang:t('menus.returnTestDrive_header'),
+--         icon = "fa-solid fa-flag-checkered",
+--         params = {
+--             event = 'qb-vehicleshop:client:TestDriveReturn'
+--         }
+--     }
+-- }
 
 -- Functions
 local function drawTxt(text, font, x, y, scale, r, g, b, a)
@@ -140,45 +140,45 @@ local function setClosestShowroomVehicle()
     end
 end
 
-local function createTestDriveReturn()
-    testDriveZone = BoxZone:Create(
-        Config.Shops[insideShop]["ReturnLocation"],
-        3.0,
-        5.0,
-        {
-            name = "box_zone_testdrive_return_" .. insideShop,
-        })
+-- local function createTestDriveReturn()
+--     testDriveZone = BoxZone:Create(
+--         Config.Shops[insideShop]["ReturnLocation"],
+--         3.0,
+--         5.0,
+--         {
+--             name = "box_zone_testdrive_return_" .. insideShop,
+--         })
 
-    testDriveZone:onPlayerInOut(function(isPointInside)
-        if isPointInside and IsPedInAnyVehicle(PlayerPedId()) then
-            SetVehicleForwardSpeed(GetVehiclePedIsIn(PlayerPedId(), false), 0)
-            exports['qb-menu']:openMenu(returnTestDrive)
-        else
-            exports['qb-menu']:closeMenu()
-        end
-    end)
-end
+--     testDriveZone:onPlayerInOut(function(isPointInside)
+--         if isPointInside and IsPedInAnyVehicle(PlayerPedId()) then
+--             SetVehicleForwardSpeed(GetVehiclePedIsIn(PlayerPedId(), false), 0)
+--             exports['qb-menu']:openMenu(returnTestDrive)
+--         else
+--             exports['qb-menu']:closeMenu()
+--         end
+--     end)
+-- end
 
-local function startTestDriveTimer(testDriveTime, prevCoords)
-    local gameTimer = GetGameTimer()
-    CreateThread(function()
-        Wait(2000) -- Avoids the condition to run before entering vehicle
-        while inTestDrive do
-            if GetGameTimer() < gameTimer + tonumber(1000 * testDriveTime) then
-                local secondsLeft = GetGameTimer() - gameTimer
-                if secondsLeft >= tonumber(1000 * testDriveTime) - 20 or GetPedInVehicleSeat(NetToVeh(testDriveVeh), -1) ~= PlayerPedId() then
-                    TriggerServerEvent('qb-vehicleshop:server:deleteVehicle', testDriveVeh)
-                    testDriveVeh = 0
-                    inTestDrive = false
-                    SetEntityCoords(PlayerPedId(), prevCoords)
-                    QBCore.Functions.Notify(Lang:t('general.testdrive_complete'))
-                end
-                drawTxt(Lang:t('general.testdrive_timer') .. math.ceil(testDriveTime - secondsLeft / 1000), 4, 0.5, 0.93, 0.50, 255, 255, 255, 180)
-            end
-            Wait(0)
-        end
-    end)
-end
+-- local function startTestDriveTimer(testDriveTime, prevCoords)
+--     local gameTimer = GetGameTimer()
+--     CreateThread(function()
+--         Wait(2000) -- Avoids the condition to run before entering vehicle
+--         while inTestDrive do
+--             if GetGameTimer() < gameTimer + tonumber(1000 * testDriveTime) then
+--                 local secondsLeft = GetGameTimer() - gameTimer
+--                 if secondsLeft >= tonumber(1000 * testDriveTime) - 20 or GetPedInVehicleSeat(NetToVeh(testDriveVeh), -1) ~= PlayerPedId() then
+--                     TriggerServerEvent('qb-vehicleshop:server:deleteVehicle', testDriveVeh)
+--                     testDriveVeh = 0
+--                     inTestDrive = false
+--                     SetEntityCoords(PlayerPedId(), prevCoords)
+--                     QBCore.Functions.Notify(Lang:t('general.testdrive_complete'))
+--                 end
+--                 drawTxt(Lang:t('general.testdrive_timer') .. math.ceil(testDriveTime - secondsLeft / 1000), 4, 0.5, 0.93, 0.50, 255, 255, 255, 180)
+--             end
+--             Wait(0)
+--         end
+--     end)
+-- end
 
 local function createVehZones(shopName, entity)
     if not Config.UsingTarget then
@@ -245,14 +245,14 @@ function createFreeUseShop(shopShape, name)
                             icon = "fa-solid fa-circle-info",
                             header = getVehBrand():upper() .. ' ' .. getVehName():upper() .. ' - $' .. getVehPrice(),
                         },
-                        {
-                            header = Lang:t('menus.test_header'),
-                            txt = Lang:t('menus.freeuse_test_txt'),
-                            icon = "fa-solid fa-car-on",
-                            params = {
-                                event = 'qb-vehicleshop:client:TestDrive',
-                            }
-                        },
+                        -- {
+                        --     header = Lang:t('menus.test_header'),
+                        --     txt = Lang:t('menus.freeuse_test_txt'),
+                        --     icon = "fa-solid fa-car-on",
+                        --     params = {
+                        --         event = 'qb-vehicleshop:client:TestDrive',
+                        --     }
+                        -- },
                         {
                             header = Lang:t('menus.freeuse_buy_header'),
                             txt = Lang:t('menus.freeuse_buy_txt'),
@@ -315,18 +315,18 @@ function createManagedShop(shopShape, name)
                             icon = "fa-solid fa-circle-info",
                             header = getVehBrand():upper() .. ' ' .. getVehName():upper() .. ' - $' .. getVehPrice(),
                         },
-                        {
-                            header = Lang:t('menus.test_header'),
-                            txt = Lang:t('menus.managed_test_txt'),
-                            icon = "fa-solid fa-user-plus",
-                            params = {
-                                event = 'qb-vehicleshop:client:openIdMenu',
-                                args = {
-                                    vehicle = Config.Shops[insideShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle,
-                                    type = 'testDrive'
-                                }
-                            }
-                        },
+                        -- {
+                        --     header = Lang:t('menus.test_header'),
+                        --     txt = Lang:t('menus.managed_test_txt'),
+                        --     icon = "fa-solid fa-user-plus",
+                        --     params = {
+                        --         event = 'qb-vehicleshop:client:openIdMenu',
+                        --         args = {
+                        --             vehicle = Config.Shops[insideShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle,
+                        --             type = 'testDrive'
+                        --         }
+                        --     }
+                        -- },
                         {
                             header = Lang:t('menus.managed_sell_header'),
                             txt = Lang:t('menus.managed_sell_txt'),
@@ -452,63 +452,63 @@ RegisterNetEvent('qb-vehicleshop:client:showVehOptions', function()
     exports['qb-menu']:openMenu(vehicleMenu, true, true)
 end)
 
-RegisterNetEvent('qb-vehicleshop:client:TestDrive', function()
-    if not inTestDrive and ClosestVehicle ~= 0 then
-        inTestDrive = true
-        local prevCoords = GetEntityCoords(PlayerPedId())
-        tempShop = insideShop -- temp hacky way of setting the shop because it changes after the callback has returned since you are outside the zone
-        QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
-            local veh = NetToVeh(netId)
-            exports['cdn-fuel']:SetFuel(veh, 100)
-            SetVehicleNumberPlateText(veh, 'TESTDRIVE')
-            SetEntityHeading(veh, Config.Shops[tempShop]["TestDriveSpawn"].w)
-            TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(veh))
-            testDriveVeh = netId
-            QBCore.Functions.Notify(Lang:t('general.testdrive_timenoti', {testdrivetime = Config.Shops[tempShop]["TestDriveTimeLimit"]}))
-        end, Config.Shops[tempShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle, Config.Shops[tempShop]["TestDriveSpawn"], true)
-        createTestDriveReturn()
-        startTestDriveTimer(Config.Shops[tempShop]["TestDriveTimeLimit"] * 60, prevCoords)
-    else
-        QBCore.Functions.Notify(Lang:t('error.testdrive_alreadyin'), 'error')
-    end
-end)
+-- RegisterNetEvent('qb-vehicleshop:client:TestDrive', function()
+--     if not inTestDrive and ClosestVehicle ~= 0 then
+--         inTestDrive = true
+--         local prevCoords = GetEntityCoords(PlayerPedId())
+--         tempShop = insideShop -- temp hacky way of setting the shop because it changes after the callback has returned since you are outside the zone
+--         QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
+--             local veh = NetToVeh(netId)
+--             exports['cdn-fuel']:SetFuel(veh, 100)
+--             SetVehicleNumberPlateText(veh, 'TESTDRIVE')
+--             SetEntityHeading(veh, Config.Shops[tempShop]["TestDriveSpawn"].w)
+--             TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(veh))
+--             testDriveVeh = netId
+--             QBCore.Functions.Notify(Lang:t('general.testdrive_timenoti', {testdrivetime = Config.Shops[tempShop]["TestDriveTimeLimit"]}))
+--         end, Config.Shops[tempShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle, Config.Shops[tempShop]["TestDriveSpawn"], true)
+--         createTestDriveReturn()
+--         startTestDriveTimer(Config.Shops[tempShop]["TestDriveTimeLimit"] * 60, prevCoords)
+--     else
+--         QBCore.Functions.Notify(Lang:t('error.testdrive_alreadyin'), 'error')
+--     end
+-- end)
 
-RegisterNetEvent('qb-vehicleshop:client:customTestDrive', function(data)
-    if not inTestDrive then
-        inTestDrive = true
-        local vehicle = data
-        local prevCoords = GetEntityCoords(PlayerPedId())
-        tempShop = insideShop -- temp hacky way of setting the shop because it changes after the callback has returned since you are outside the zone
-        QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
-            local veh = NetToVeh(netId)
-            exports['cdn-fuel']:SetFuel(veh, 100)
-            SetVehicleNumberPlateText(veh, 'TESTDRIVE')
-            SetEntityHeading(veh, Config.Shops[tempShop]["TestDriveSpawn"].w)
-            TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(veh))
-            testDriveVeh = netId
-            QBCore.Functions.Notify(Lang:t('general.testdrive_timenoti', {testdrivetime = Config.Shops[tempShop]["TestDriveTimeLimit"]}))
-        end, vehicle, Config.Shops[tempShop]["TestDriveSpawn"], true)
-        createTestDriveReturn()
-        startTestDriveTimer(Config.Shops[tempShop]["TestDriveTimeLimit"] * 60, prevCoords)
-    else
-        QBCore.Functions.Notify(Lang:t('error.testdrive_alreadyin'), 'error')
-    end
-end)
+-- RegisterNetEvent('qb-vehicleshop:client:customTestDrive', function(data)
+--     if not inTestDrive then
+--         inTestDrive = true
+--         local vehicle = data
+--         local prevCoords = GetEntityCoords(PlayerPedId())
+--         tempShop = insideShop -- temp hacky way of setting the shop because it changes after the callback has returned since you are outside the zone
+--         QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
+--             local veh = NetToVeh(netId)
+--             exports['cdn-fuel']:SetFuel(veh, 100)
+--             SetVehicleNumberPlateText(veh, 'TESTDRIVE')
+--             SetEntityHeading(veh, Config.Shops[tempShop]["TestDriveSpawn"].w)
+--             TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(veh))
+--             testDriveVeh = netId
+--             QBCore.Functions.Notify(Lang:t('general.testdrive_timenoti', {testdrivetime = Config.Shops[tempShop]["TestDriveTimeLimit"]}))
+--         end, vehicle, Config.Shops[tempShop]["TestDriveSpawn"], true)
+--         createTestDriveReturn()
+--         startTestDriveTimer(Config.Shops[tempShop]["TestDriveTimeLimit"] * 60, prevCoords)
+--     else
+--         QBCore.Functions.Notify(Lang:t('error.testdrive_alreadyin'), 'error')
+--     end
+-- end)
 
-RegisterNetEvent('qb-vehicleshop:client:TestDriveReturn', function()
-    local ped = PlayerPedId()
-    local veh = GetVehiclePedIsIn(ped)
-    local entity = NetworkGetEntityFromNetworkId(testDriveVeh)
-    if veh == entity then
-        testDriveVeh = 0
-        inTestDrive = false
-        DeleteEntity(veh)
-        exports['qb-menu']:closeMenu()
-        testDriveZone:destroy()
-    else
-        QBCore.Functions.Notify(Lang:t('error.testdrive_return'), 'error')
-    end
-end)
+-- RegisterNetEvent('qb-vehicleshop:client:TestDriveReturn', function()
+--     local ped = PlayerPedId()
+--     local veh = GetVehiclePedIsIn(ped)
+--     local entity = NetworkGetEntityFromNetworkId(testDriveVeh)
+--     if veh == entity then
+--         testDriveVeh = 0
+--         inTestDrive = false
+--         DeleteEntity(veh)
+--         exports['qb-menu']:closeMenu()
+--         testDriveZone:destroy()
+--     else
+--         QBCore.Functions.Notify(Lang:t('error.testdrive_return'), 'error')
+--     end
+-- end)
 
 RegisterNetEvent('qb-vehicleshop:client:vehCategories', function(data)
     local catmenu = {}
